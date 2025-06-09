@@ -1,4 +1,8 @@
 <p>Pick your genre:</p>
-<div *ngFor="let genre of genres">
-    <button (click)="onGenreSelect(genre)">{{ genre }}</button>
+<div class="genre-card-container">
+    <mat-card class="genre-card" (click)="onGenreSelect(genre)" *ngFor="let genre of genres">
+        <mat-card-content>
+            {{ genre }}
+        </mat-card-content>
+    </mat-card>
 </div>

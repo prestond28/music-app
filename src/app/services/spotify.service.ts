@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
-import { Observable} from 'rxjs'
+import { Observable } from 'rxjs'
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -30,7 +30,7 @@ export class SpotifyService {
   }
 
   getSpotifyPlaylist (playlistId: string): Observable<any> {
-    const url = `https://api.spotify.com/v1/playlists/${playlistId}`;
+    const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=20`;
     const authHeaders = new HttpHeaders({
     'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': `Bearer ${this.authService.getSpotifyAccessToken()}`

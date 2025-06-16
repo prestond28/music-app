@@ -1,8 +1,8 @@
 <p>Pick your genre:</p>
 <div class="genre-card-container">
-    <mat-card class="genre-card" (click)="onGenreSelect(genre)" *ngFor="let genre of genres">
+    <mat-card class="genre-card" (click)="onGenreSelect(genre.name)" *ngFor="let genre of genres">
         <mat-card-content>
-            {{ genre }}
+            {{ genre.name }}
         </mat-card-content>
     </mat-card>
 </div>

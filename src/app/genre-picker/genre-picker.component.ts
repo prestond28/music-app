@@ -4,26 +4,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { SpotifyService } from '../services/spotify.service';
 import { MatCardModule } from '@angular/material/card';
+import { SpotifyPlaylist, SpotifyTrack } from '../models/spotify.models';
 
 interface PlaylistOptions {
     name: string;
     id: string;
   }
-
-interface SpotifyTrack {
-    name: string;
-    id: string;
-}
-
-interface SpotifyPlaylist {
-    name: string;
-    tracks: {
-        items: {
-            track: SpotifyTrack;
-        }[];
-    };
-
-}
 
 @Component({
   selector: 'app-genre-picker',
@@ -66,16 +52,19 @@ export class GenrePickerComponent implements OnInit {
       this.spotifyService.getSpotifyPlaylist(selectedGenre.id).subscribe(result => {
           // handle the result here
           console.log(result);
-          if (result && result.name) {
+          if (result) {
             this.genreSetList = {
-              name: result.name,
-              tracks: result.tracks.items.map((item: any) => ({
-                name: item.track.name,
-                id: item.track.id
-              }))
+              name: selectedGenre.name,
+              tracks: result.items.map((item: any) => {
+                const track: SpotifyTrack = {
+                  name: item.track.name,
+                  id: item.track.id
+                };
+                return track;
+              })
             };
 
-            console.log('Genre added:', result.name);
+            console.log('Genre added to set list: ', selectedGenre.name);
             console.log(this.genreSetList);
           }
 

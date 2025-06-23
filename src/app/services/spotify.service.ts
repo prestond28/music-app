@@ -1,7 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { Observable, of } from 'rxjs'
+import { expand, map, reduce } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+
+// interface SpotifyPlaylistResponse {
+//   href: string;
+//   items: {}[];
+//   limit: number;
+//   next: string | null;
+//   offset: number;
+//   previous: string | null;
+//   total: number;
+// }
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +41,34 @@ export class SpotifyService {
   }
 
   getSpotifyPlaylist (playlistId: string): Observable<any> {
-    const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=20`;
+    const limit = 100;
     const authHeaders = new HttpHeaders({
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': `Bearer ${this.authService.getSpotifyAccessToken()}`
-    })
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Bearer ${this.authService.getSpotifyAccessToken()}`
+    });
 
-    return this.http.get(url, { headers: authHeaders });
+    const fetchPage = (offset: number) => {
+      const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`;
+      return this.http.get(url, { headers: authHeaders });
+    };
+
+    return fetchPage(0).pipe(
+      expand((data: any, i) => {
+        const nextOffset = (i + 1) * limit;
+        return nextOffset < data.total ? fetchPage(nextOffset) : of();
+      }),
+      // Accumulate all responses
+      reduce((acc: any, data: any) => {
+        if (!acc) {
+          // On first call, keep all properties and start items array
+          return { ...data, items: [...data.items] };
+        }
+        // On subsequent calls, concatenate items
+        acc.items = acc.items.concat(data.items);
+        return acc;
+      }, null)
+    );
+
+
   }
 }

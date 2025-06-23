@@ -1,2 +1,15 @@
-<p>game works!</p>
 <app-spotify-playback></app-spotify-playback>
+@if(!isStarted) {
+    <button mat-raised-button (click)="onGameStart()">Start Game</button>
+} @else if(isStarted && roundSetList) {
+    @for(track of roundSetList; track $index) {
+        <button>{{ track.name }}</button>
+    }
+    <!-- <div *ngFor="let track of roundSetList">
+        <button>{{ track.name }}</button>
+    </div> -->
+} @else if(isStarted && !roundSetList) {
+    <div>Loading tracks...</div>
+} @else {
+    <div>Game is broken!</div>
+}

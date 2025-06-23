@@ -1,7 +1,7 @@
 <div class="form-group">
-  <button mat-raised-button (click)="onAuthClick()">Authenticate</button>
+  <button mat-raised-button (click)="onAuthClick()">Log in with Spotify</button>
 </div>
 <div *ngIf="userAuthenticated">
-  <div>Authenticated!</div>
+  <div>Logged in!</div>
   <app-genre-picker></app-genre-picker>
 </div>

@@ -1,8 +1,20 @@
-@use '@angular/material' as mat;
+.title {
+  background-color: #7d00fa;
+  width: 300px;
+  display: flex;
+  text-align: center;
+  color: white;
+  font-size: 40px;
+  margin: 15px;
+  padding: 10px;
+  justify-content: center;
+  border-radius: 100px;
+}
 
 .genre-card-container {
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
+    align-items: center;
     gap: 8px;
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -12,9 +24,24 @@
 }
 
 .genre-card {
-    @include mat.elevation(4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: #7d00fa 5px solid;
+    border-radius: 10px;
+    color: #7d00fa;
+    min-width: 300px;
     width: 300px;
     height: 300px;
+    font-size: 40px;
     cursor: pointer;
     flex: 0 0 auto;
+}
+
+.genre-card.selected {
+  background-color: #7d00fa;
+  color: #fff;
+  border: 10px solid #7d00fa;
+  transition: background 0.2s, border 0.2s;
 }

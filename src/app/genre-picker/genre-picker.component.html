@@ -1,8 +1,11 @@
-<p>Pick your genre:</p>
+<div class="title">Pick your genre</div>
 <div class="genre-card-container">
-    <mat-card class="genre-card" (click)="onGenreSelect(genre.name)" *ngFor="let genre of genres">
-        <mat-card-content>
-            {{ genre.name }}
-        </mat-card-content>
-    </mat-card>
+    <div
+        class="genre-card" 
+        (click)="onGenreSelect(genre.name)" 
+        *ngFor="let genre of genres"
+        [class.selected]="selectedGenreName === genre.name"
+    >
+    {{ genre.name }}
+    </div>
 </div>

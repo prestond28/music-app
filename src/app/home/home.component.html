@@ -1,7 +1,22 @@
-<div class="form-group">
-  <button mat-raised-button (click)="onAuthClick()">Log in with Spotify</button>
-</div>
-<div *ngIf="userAuthenticated">
-  <div>Logged in!</div>
+@if (!userAuthenticated) {
+  <button mat-raised-button
+    (click)="onAuthClick()"
+    class="login-button"
+  >
+  Log in with Spotify
+  </button>
+} @else {
+  <div class="navbar">
+    <button mat-raised-button class="logout-button" (click)="onLogOut()">Log Out</button>
+  </div>
   <app-genre-picker></app-genre-picker>
-</div>
+  <app-setting-adjuster></app-setting-adjuster>
+  <button
+        mat-raised-button
+        class="start-game"
+        (click)="startGame()"
+        [disabled]="!genreSetList"
+  >
+  Start Game
+  </button>
+}

@@ -1,4 +1,14 @@
 export interface SpotifyTrack {
+    album: {
+        images: {
+            height: number;
+            url: string;
+            width: number;
+        }[];
+    };
+    artists: {
+        name: string;
+    }[];
     name: string;
     id: string;
 }
@@ -9,6 +19,7 @@ export interface SpotifyPlaylist {
     // tracks: {
     //     items: {
     //         track: SpotifyTrack;
+    
     //     }[];
     // };
 }

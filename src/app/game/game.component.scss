@@ -1,0 +1,72 @@
+button.correct-answer,
+button.mat-raised-button.correct-answer {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+button.wrong-answer,
+button.mat-raised-button.wrong-answer {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.loading-game {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;    
+}
+
+.track-button-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 60vh;
+  max-width: 600px;
+  max-height: 200px;
+  margin-bottom: 20px;
+}
+
+.track-button {
+  width: 250px;
+  height: 80px;
+  margin: 5px;
+}
+
+.guessing-timer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+
+.game-art {
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.track-info {
+  font-size: x-large;
+  margin-bottom: 15px;
+  color: #7d00fa;
+  font-weight: 450;
+}
+
+.track-name {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.track-artist {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}

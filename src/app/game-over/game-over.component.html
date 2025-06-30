@@ -1,0 +1,16 @@
+<div class="game-over-container">
+    <div class="final-score">Score: {{ score }}</div>
+    <button
+        mat-raised-button
+        class="restart-game"
+        (click)="restartGame()"
+    >
+    Play Again!
+    </button>
+    <div
+        class="go-home"
+        (click)="goHome()"
+    >
+    Choose a different genre
+    </div>
+</div>

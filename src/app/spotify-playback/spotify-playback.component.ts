@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { SpotifyService } from '../services/spotify.service';
 
 declare global {
   interface Window {
@@ -16,29 +17,54 @@ declare global {
 })
 export class SpotifyPlaybackComponent implements OnInit {
 
-public device_id: string | null = null;
+  public device_id: string | null = null;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private spotifyService: SpotifyService) { }
 
   playTrack(trackId: string): void {
+    if (!this.device_id) {
+      console.warn('Device ID not ready yet!');
+      return;
+      } 
     const token = this.authService.getSpotifyAccessToken();
     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.device_id}`, {
-    method: 'PUT',
-    body: JSON.stringify({
-      uris: [`spotify:track:${trackId}`]
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      method: 'PUT',
+      body: JSON.stringify({
+        uris: [`spotify:track:${trackId}`]
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+      }).then(response => {
+        if (response.ok) {
+          console.log('Playback started!');
+        } else {
+          response.json().then(data => console.error('Playback error:', data));
+        }
+      }).catch(err => console.error('Fetch error:', err));
+  };
+
+  stopTrack(): void {
+    const token = this.authService.getSpotifyAccessToken();
+    if (!this.device_id) {
+      console.warn('Device ID not ready to pause track!');
+      return;
     }
-  }).then(response => {
-    if (response.ok) {
-      console.log('Playback started!');
-    } else {
-      response.json().then(data => console.error('Playback error:', data));
-    }
-  }).catch(err => console.error('Fetch error:', err));
-};
+    fetch(`https://api.spotify.com/v1/me/player/pause?device_id=${this.device_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(response => {
+      if (response.ok) {
+        console.log('Playback paused!');
+      } else {
+        response.json().then(data => console.error('Pause error:', data));
+      }
+    }).catch(err => console.error('Fetch error:', err));
+  }
     
 
   ngOnInit(): void {
@@ -58,6 +84,7 @@ public device_id: string | null = null;
       player.addListener('ready', ({ device_id }: { device_id: string }) => {
         console.log('Ready with Device ID', device_id);
         this.device_id = device_id;
+        this.spotifyService.setDeviceId(device_id);
       });
 
       // Not Ready

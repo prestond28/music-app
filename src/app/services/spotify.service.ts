@@ -3,6 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import { Observable, of } from 'rxjs'
 import { expand, map, reduce } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 // interface SpotifyPlaylistResponse {
 //   href: string;
@@ -22,12 +23,21 @@ export class SpotifyService {
   client_id = '684e45693aeb488fa54c4580401e3d8a'
   url = 'https://accounts.spotify.com/api/token'
   redirect_uri = 'http://127.0.0.1:4200/spotify_callback'
+  private _deviceId: BehaviorSubject<string | null> =  new BehaviorSubject<string | null>(null);
+  
+  public isDeviceIdReady$: Observable<boolean> = this._deviceId.asObservable().pipe(
+    map((_deviceId: string | null) => !!_deviceId)
+  );
 
   headers = new HttpHeaders({
     'Content-Type': 'application/x-www-form-urlencoded',
   })
 
   constructor(private http: HttpClient, private authService: AuthService) { }
+
+  public setDeviceId (deviceId: string): void {
+    this._deviceId.next(deviceId);
+  }
 
   getData (code: string, codeVerifier: string): Observable<any> {
     const body = new HttpParams()

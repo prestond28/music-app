@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Inject, Injectable, OnInit, PLATFORM_ID } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import shajs from 'sha.js';
 //Source for spotify auth setup: https://danielmccannsayles.medium.com/angular-tutorial-spotify-oauth2-authorization-code-flow-with-pkce-bbe9ecc3680a
 
@@ -24,23 +25,25 @@ export interface SpotifyAuthObject {
   providedIn: 'root'
 })
 export class AuthService {
-  private _userAuthenticated: boolean = false;
+  private _userAuthenticated: BehaviorSubject<boolean | null> =  new BehaviorSubject<boolean | null>(null);
   authObject: string | null = null
 
-  public get userAuthenticated(): boolean {
-    return this._userAuthenticated;
-  }
+  public userAuthenticated$ = this._userAuthenticated.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+
+  setUserAuthenticated(userAuthenticated: boolean): void {
+      this._userAuthenticated.next(userAuthenticated);
+    }
 
   public checkAuth(): void {
     if (isPlatformBrowser(this.platformId)) { //check to ensure this code runs only in the browser (else undefined error with localStorage)
       const authObjectJson = localStorage.getItem('auth_object');
       if (authObjectJson){
         this.authObject = JSON.parse(authObjectJson)
-        this._userAuthenticated = true
+        this.setUserAuthenticated(true);
       } else {
-        this._userAuthenticated = false;
+        this.setUserAuthenticated(false);
       }
     }
   }
@@ -81,7 +84,12 @@ export class AuthService {
   authenticate(result: any) {
     console.log(result)
     localStorage.setItem('auth_object', JSON.stringify(result));
-    this._userAuthenticated = true;
+    this.setUserAuthenticated(true);
+  }
+
+  onLogOut() {
+    localStorage.clear();
+    this.setUserAuthenticated(false);
   }
 
   public getSpotifyAccessToken(): string {

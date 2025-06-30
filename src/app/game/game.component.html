@@ -1,15 +1,44 @@
-<app-spotify-playback></app-spotify-playback>
-@if(!isStarted) {
-    <button mat-raised-button (click)="onGameStart()">Start Game</button>
-} @else if(isStarted && roundSetList) {
-    @for(track of roundSetList; track $index) {
-        <button>{{ track.name }}</button>
-    }
-    <!-- <div *ngFor="let track of roundSetList">
-        <button>{{ track.name }}</button>
-    </div> -->
-} @else if(isStarted && !roundSetList) {
-    <div>Loading tracks...</div>
+<app-spotify-playback #playback></app-spotify-playback>
+@if(isLoadingRound) {
+    <mat-spinner class="loading-game" diameter="100"></mat-spinner>   
+} @else if(!isRunning && !isGameOver) {
+    <mat-spinner class="loading-game" diameter="100"></mat-spinner>
+} @else if(isRunning) {
+    <div class="game-container">
+        @if(answerSelected || timeToGuess <= 0) {   
+            <img [src]="correctTrack?.album?.images?.[1]?.url" alt="Album Art" class="game-art" />
+            <div class="track-info">
+                <div class="track-name">{{ correctTrack?.name }}</div>
+                <div class="track-artist">{{ correctTrack?.artists?.[0]?.name }}</div>   
+            </div>
+        } @else {
+            <img src="sound.gif" alt="Sound Wave" class="game-art" />
+        }
+        <div class="track-button-container">
+            @for(track of roundSetList; track $index) {
+                <button
+                    class="track-button"
+                    mat-raised-button
+                    [disabled]="answerSelected || timeToGuess === 0"
+                    (click)="onTrackSelected(track)"
+                    [ngClass]="{
+                        'correct-answer': track.isCorrect && selectedTrackId === track.id,
+                        'wrong-answer': !track.isCorrect && selectedTrackId === track.id
+                    }"
+                >
+                {{ track.name }}
+                </button>
+            }
+        </div>
+        <mat-progress-bar
+            class="guessing-timer"
+            mode="determinate"
+            [value]="(timeToGuess / maxTimeToGuess) * 100"
+            [bufferValue]="100"
+        ></mat-progress-bar>
+    </div>
+} @else if(!isRunning && isGameOver) {
+    <div>Score: {{ score }}</div>
 } @else {
     <div>Game is broken!</div>
 }

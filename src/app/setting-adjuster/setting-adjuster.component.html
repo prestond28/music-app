@@ -1,0 +1,9 @@
+<div class="round-selection">
+    <div class="round-numbers-label">Number of Rounds</div>
+    <mat-button-toggle-group class="round-numbers" [value]="numRounds" (change)="onValChange($event.value)">
+        <mat-button-toggle [value]="3">3</mat-button-toggle>
+        <mat-button-toggle [value]="5">5</mat-button-toggle>
+        <mat-button-toggle [value]="7">7</mat-button-toggle>
+        <mat-button-toggle [value]="10">10</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>

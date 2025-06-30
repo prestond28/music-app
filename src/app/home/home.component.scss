@@ -1,0 +1,21 @@
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logout-button {
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.start-game {
+    margin-left: 15px;
+    margin-bottom: 20px;
+}
+
+.login-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

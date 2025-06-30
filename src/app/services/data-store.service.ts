@@ -10,9 +10,11 @@ export class DataStoreService {
 
   public genreSetList$ = this._genreSetList.asObservable();
 
+  public numRounds: number = 5;
+
   constructor() { }
 
-  setGerneSetList(genreSetList: SpotifyPlaylist): void {
+  setGenreSetList(genreSetList: SpotifyPlaylist): void {
     this._genreSetList.next(genreSetList);
   }
 
